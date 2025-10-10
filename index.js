@@ -15,6 +15,9 @@ const {
   makeInMemoryStore,
   useMultiFileAuthState,
   DisconnectReason,
+  generateWAMessage, 
+  generateWAMessageFromContent, 
+  getContentType, 
 } = require('lotusbail');
 
 // ==================== CONFIGURATION ==================== //
